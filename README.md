@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PixelMage - Transform Your Images with AI
+
+PixelMage is a Next.js application that uses Luma Labs Dream Machine API for image generation and transformation. This project allows users to enter a descriptive prompt to generate new images or transform existing images by providing an image URL.
+
+## Features
+
+- Text-to-image generation with AI
+- Image-to-image transformation using publicly accessible image URLs
+- Real-time status updates during generation
+- Responsive design that works on all devices
+- Image preview and download capability
+
+## Technologies Used
+
+- Next.js 15 with App Router
+- React 19
+- TypeScript
+- Luma Labs Dream Machine API
+- react-hook-form for form handling
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ and npm
+- A Luma Labs API key (get one from [https://lumalabs.ai/dream-machine/api/keys](https://lumalabs.ai/dream-machine/api/keys))
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies
+
+```bash
+npm install
+```
+
+3. Create a `.env.local` file with the following content:
+
+```
+# Luma Labs API Key
+LUMAAI_API_KEY=your-luma-api-key-here
+
+# Base URL for your application
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+```
+
+4. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Text-to-Image
+1. Select "Text to Image" mode
+2. Enter a descriptive prompt for the image you want to generate
+3. Click "Generate Image"
+4. Wait for the image to be generated
+5. View and download the generated image
 
-## Learn More
+### Image-to-Image
+1. Select "Image to Image" mode
+2. Enter a publicly accessible image URL (must start with http:// or https://)
+3. Enter a descriptive prompt for how you want to transform the image
+4. Click "Generate Image"
+5. Wait for the image to be generated
+6. View and download the generated image
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+You can deploy this application to Vercel, Netlify, or any other Next.js-compatible hosting platform.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Important Notes
 
-## Deploy on Vercel
+- For the image-to-image feature, you must use publicly accessible image URLs that the Luma Labs API can access.
+- Remember to set up environment variables for your production deployment.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
