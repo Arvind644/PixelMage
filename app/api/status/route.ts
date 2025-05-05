@@ -26,10 +26,11 @@ export async function GET(request: NextRequest) {
       state: generation.state,
       imageUrl: generation.assets?.image || null,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Failed to check generation status';
     console.error('Error checking generation status:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to check generation status' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

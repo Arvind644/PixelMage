@@ -51,10 +51,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ 
       generationId: generation.id,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Failed to generate image';
     console.error('Error generating image:', error);
     return NextResponse.json(
-      { error: error.message || 'Failed to generate image' },
+      { error: errorMessage },
       { status: 500 }
     );
   }

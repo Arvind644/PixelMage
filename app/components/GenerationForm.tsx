@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { LinkIcon, ImageIcon, TypeIcon } from 'lucide-react';
+import { ImageIcon, TypeIcon } from 'lucide-react';
+import Image from 'next/image';
 
 interface FormData {
   prompt: string;
@@ -13,7 +14,6 @@ type GenerationType = 'text-to-image' | 'image-to-image';
 
 export default function GenerationForm() {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generationId, setGenerationId] = useState<string | null>(null);
   const [generationStatus, setGenerationStatus] = useState<'idle' | 'generating' | 'polling' | 'complete' | 'error'>('idle');
   const [resultImageUrl, setResultImageUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -22,10 +22,6 @@ export default function GenerationForm() {
   const { register, handleSubmit, formState: { errors }, watch } = useForm<FormData>();
   
   const watchImageUrl = watch('imageUrl');
-
-  const toggleGenerationType = () => {
-    setGenerationType(generationType === 'text-to-image' ? 'image-to-image' : 'text-to-image');
-  };
 
   const startPolling = async (id: string) => {
     setGenerationStatus('polling');
@@ -88,10 +84,10 @@ export default function GenerationForm() {
         throw new Error(responseData.error || 'Error generating image');
       }
 
-      setGenerationId(responseData.generationId);
       startPolling(responseData.generationId);
-    } catch (error: any) {
-      setError(error.message || 'Error generating image');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Error generating image';
+      setError(errorMessage);
       setGenerationStatus('error');
     } finally {
       setIsGenerating(false);
@@ -171,18 +167,22 @@ export default function GenerationForm() {
               {watchImageUrl && (
                 <div className="mt-4">
                   <p className="text-sm text-gray-500 mb-2">Source Image Preview:</p>
-                  <img 
-                    src={watchImageUrl} 
-                    alt="Source image preview" 
-                    className="w-full max-h-64 object-contain rounded-md border border-gray-200 dark:border-gray-700" 
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      const errorMsg = document.getElementById('img-error');
-                      if (errorMsg) errorMsg.style.display = 'block';
-                    }}
-                  />
+                  <div className="relative w-full h-64 border border-gray-200 dark:border-gray-700 rounded-md overflow-hidden">
+                    {watchImageUrl && (
+                      <Image 
+                        src={watchImageUrl}
+                        alt="Source image preview"
+                        fill
+                        className="object-contain"
+                        onError={() => {
+                          const errorMsg = document.getElementById('img-error');
+                          if (errorMsg) errorMsg.style.display = 'block';
+                        }}
+                      />
+                    )}
+                  </div>
                   <p id="img-error" className="text-amber-600 dark:text-amber-400 text-sm mt-2" style={{display: 'none'}}>
-                    Unable to preview image. This doesn't necessarily mean the URL is invalid - some sites block direct embedding.
+                    Unable to preview image. This does not necessarily mean the URL is invalid - some sites block direct embedding.
                   </p>
                 </div>
               )}
@@ -211,11 +211,14 @@ export default function GenerationForm() {
       {resultImageUrl && (
         <div className="mt-8 p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
           <h3 className="text-lg font-medium mb-3">Generated Image</h3>
-          <img 
-            src={resultImageUrl} 
-            alt="Generated result" 
-            className="w-full rounded-md" 
-          />
+          <div className="relative w-full aspect-square rounded-md overflow-hidden">
+            <Image 
+              src={resultImageUrl}
+              alt="Generated result"
+              fill
+              className="object-contain"
+            />
+          </div>
           <a 
             href={resultImageUrl} 
             download 
@@ -236,7 +239,7 @@ export default function GenerationForm() {
           </div>
           <h3 className="text-lg font-medium text-center">Generating your image...</h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
-            This can take a few minutes. The image will appear here when it's ready.
+            This can take a few minutes. The image will appear here when it is ready.
           </p>
         </div>
       )}

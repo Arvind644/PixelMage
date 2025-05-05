@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
         hostname: 'storage.cdn-luma.com',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: '**',
+        pathname: '**',
+      },
+      {
+        protocol: 'http',
+        hostname: '**',
+        pathname: '**',
+      },
     ],
   },
 };
